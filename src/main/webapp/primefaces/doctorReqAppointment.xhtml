@@ -1,0 +1,90 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+<h:head>
+</h:head>
+<h:body>
+	<ui:composition template="/doctor-template/template.xhtml">
+		<ui:define name="content">
+			<div class="main">
+
+				<p:growl id="growl"></p:growl>
+
+			<center></center>
+
+
+				<p:dataTable value="#{doctorReqAppointmentManagedBean.appointments}"
+					var="appointment" id="table">
+					<f:facet name="header">
+						<div class="p-d-flex p-ai-center p-jc-between">
+							<span>List of Appointments</span>
+						</div>
+					</f:facet>
+
+					<p:column headerText="Patient">
+						<p:outputLabel value="#{appointment.patient.fullName}"></p:outputLabel>
+					</p:column>
+					<p:column headerText="Date">
+						<p:outputLabel value="#{appointment.date}"></p:outputLabel>
+					</p:column>
+					<p:column headerText="Status">
+						<p:outputLabel value="#{appointment.status}"></p:outputLabel>
+
+					</p:column>
+
+					<p:column headerText="Actions">
+
+
+						<p:commandButton immediate="true" value="Approve"
+							styleClass="rounded-button ui-button-secondary"
+							icon="pi pi-check" update="table growl"
+							action="#{doctorReqAppointmentManagedBean.approve}">
+							<!-- disabled="#{appointment.status eq 'Completed'}" -->
+							
+							<f:setPropertyActionListener
+								target="#{doctorReqAppointmentManagedBean.appointment}"
+								value="#{appointment}" />
+						</p:commandButton>
+					</p:column>
+					<p:column headerText="">
+						
+
+						<p:commandButton immediate="true" value="Reject"
+							styleClass="rounded-button ui-button-danger" icon="pi pi-times"
+							update="table growl"
+							action="#{doctorReqAppointmentManagedBean.reject}">
+							<p:confirm header="Confirmation" message="Are you sure?"
+								icon="pi pi-exclamation-triangle" />
+
+							<f:setPropertyActionListener
+								target="#{doctorReqAppointmentManagedBean.appointment}"
+								value="#{appointment}" />
+						</p:commandButton>
+
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Yes" type="button"
+								styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
+							<p:commandButton value="No" type="button"
+								styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+						</p:confirmDialog>
+					</p:column>
+
+				</p:dataTable>
+
+				<p:dialog header="Edit Appointments" id="updateDialog"
+					widgetVar="EditDialog" modal="true">
+					<h:form id="dialogForm">
+
+					
+					</h:form>
+
+				</p:dialog>
+			</div>
+
+		</ui:define>
+	</ui:composition>
+</h:body>
+</html>
